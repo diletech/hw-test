@@ -7,8 +7,8 @@ import (
 	"unicode"
 )
 
-var ErrInvalidStringFirstnumber = errors.New("The first letter should not be digit")
-var ErrInvalidStringMultiplire = errors.New("The multiplier should be one digit")
+var ErrInvalidStringFirstnumber = errors.New("the first letter should not be digit")
+var ErrInvalidStringMultiplire = errors.New("the multiplier should be one digit")
 
 func Unpack(input string) (string, error) {
 	var result strings.Builder
