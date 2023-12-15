@@ -39,7 +39,7 @@ func TestUnpackInvalidString1(t *testing.T) {
 		tc := tc
 		t.Run(tc, func(t *testing.T) {
 			_, err := Unpack(tc)
-			require.Truef(t, errors.Is(err, ErrInvalidString_firstnumber), "actual error %q", err)
+			require.Truef(t, errors.Is(err, ErrInvalidStringFirstnumber), "actual error %q", err)
 		})
 	}
 }
@@ -49,7 +49,7 @@ func TestUnpackInvalidString2(t *testing.T) {
 		tc := tc
 		t.Run(tc, func(t *testing.T) {
 			_, err := Unpack(tc)
-			require.Truef(t, errors.Is(err, ErrInvalidString_multiplire), "actual error %q", err)
+			require.Truef(t, errors.Is(err, ErrInvalidStringMultiplire), "actual error %q", err)
 		})
 	}
 }

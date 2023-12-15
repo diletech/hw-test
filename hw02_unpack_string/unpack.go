@@ -7,9 +7,8 @@ import (
 	"unicode"
 )
 
-// var ErrInvalidString = errors.New("invalid string")
-var ErrInvalidString_firstnumber = errors.New("The first letter should not be digit")
-var ErrInvalidString_multiplire = errors.New("The multiplier should be one digit")
+var ErrInvalidStringFirstnumber = errors.New("The first letter should not be digit")
+var ErrInvalidStringMultiplire = errors.New("The multiplier should be one digit")
 
 func Unpack(input string) (string, error) {
 	var result strings.Builder
@@ -19,7 +18,7 @@ func Unpack(input string) (string, error) {
 	if length == 0 {
 		return "", nil
 	} else if unicode.IsDigit(runeSlice[0]) {
-		return "", ErrInvalidString_firstnumber
+		return "", ErrInvalidStringFirstnumber
 	}
 
 	for i := 0; i < length; i++ {
@@ -27,7 +26,7 @@ func Unpack(input string) (string, error) {
 
 		if i+1 < length && unicode.IsDigit(runeSlice[i+1]) {
 			if i+2 < length && unicode.IsDigit(runeSlice[i+2]) {
-				return "", ErrInvalidString_multiplire
+				return "", ErrInvalidStringMultiplire
 			}
 			count, _ := strconv.Atoi(string(runeSlice[i+1]))
 			result.WriteString(strings.Repeat(string(currentChar), count))
