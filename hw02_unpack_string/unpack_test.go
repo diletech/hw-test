@@ -43,6 +43,7 @@ func TestUnpackInvalidString1(t *testing.T) {
 		})
 	}
 }
+
 func TestUnpackInvalidString2(t *testing.T) {
 	invalidStrings := []string{"aaa10b", "a2b234d"}
 	for _, tc := range invalidStrings {
@@ -54,7 +55,7 @@ func TestUnpackInvalidString2(t *testing.T) {
 	}
 }
 
-// тупо для балов добавил юнит-тест с проверкой длинны
+// тупо для балов добавил юнит-тест с проверкой длинны				.
 func TestUnpackWithNumbers(t *testing.T) {
 	tests := []struct {
 		input    string
