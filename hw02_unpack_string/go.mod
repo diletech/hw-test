@@ -1,4 +1,4 @@
-module unpack
+module github.com/diletech/hw-test/hw02_unpack_string
 
 go 1.21
 
