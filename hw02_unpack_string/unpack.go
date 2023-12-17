@@ -19,7 +19,9 @@ func Unpack(input string) (string, error) {
 
 	if length == 0 {
 		return "", nil
-	} else if unicode.IsDigit(runeSlice[0]) {
+	}
+
+	if unicode.IsDigit(runeSlice[0]) {
 		return "", ErrInvalidStringFirstnumber
 	}
 
@@ -30,7 +32,10 @@ func Unpack(input string) (string, error) {
 			if i+2 < length && unicode.IsDigit(runeSlice[i+2]) {
 				return "", ErrInvalidStringMultiplire
 			}
-			count, _ := strconv.Atoi(string(runeSlice[i+1]))
+			count, err := strconv.Atoi(string(runeSlice[i+1]))
+			if err != nil {
+				panic("atoi: " + err.Error())
+			}
 			result.WriteString(strings.Repeat(string(currentChar), count))
 			i++
 		} else {
