@@ -1,15 +1,25 @@
 package hw03frequencyanalysis
 
 import (
+	"regexp"
 	"sort"
 	"strings"
 )
 
 func Top10(input string) []string {
-	words := strings.Fields(input)
+	if input == "" {
+		return []string{}
+	}
+	re := regexp.MustCompile(`\s+|\n`)
+	words := re.Split(input, -1)
 
 	wordFreq := make(map[string]int)
 	for _, word := range words {
+		word = strings.Trim(word, ".,!?:;'\"")
+		word = strings.ToLower(word)
+		if word == "-" || word == "—" {
+			continue
+		}
 		wordFreq[word]++
 	}
 
