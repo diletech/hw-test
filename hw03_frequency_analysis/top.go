@@ -6,12 +6,13 @@ import (
 	"strings"
 )
 
+var reSpaceOrNewline = regexp.MustCompile(`\s+|\n`)
+
 func Top10(input string) []string {
 	if input == "" {
 		return []string{}
 	}
-	re := regexp.MustCompile(`\s+|\n`)
-	words := re.Split(input, -1)
+	words := reSpaceOrNewline.Split(input, -1)
 
 	wordFreq := make(map[string]int)
 	for _, word := range words {
@@ -28,8 +29,7 @@ func Top10(input string) []string {
 		count int
 	}
 
-	//nolint:prealloc
-	var wordCounts []wordCount
+	wordCounts := make([]wordCount, 0, 32)
 	for word, count := range wordFreq {
 		wordCounts = append(wordCounts, wordCount{word, count})
 	}
