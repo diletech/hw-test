@@ -1,4 +1,4 @@
-module github.com/diletech/hw03_frequency_analysis
+module github.com/diletech/hw-test/hw03_frequency_analysis
 
 go 1.21
 
