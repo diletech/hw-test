@@ -49,3 +49,78 @@ func TestList(t *testing.T) {
 		require.Equal(t, []int{70, 80, 60, 40, 10, 30, 50}, elems)
 	})
 }
+
+func TestListOperations(t *testing.T) {
+	// Создаем новый список
+	myList := NewList()
+
+	// Проверяем начальную длину списка
+	if myList.Len() != 0 {
+		t.Errorf("Expected initial length: 0, got: %d", myList.Len())
+	}
+
+	// Добавляем элементы в список
+	item1 := myList.PushFront(1)
+	item2 := myList.PushBack(2)
+	item3 := myList.PushBack(3)
+
+	// Проверяем длину после добавления
+	if myList.Len() != 3 {
+		t.Errorf("Expected length after adding elements: 3, got: %d", myList.Len())
+	}
+
+	// Проверяем Front и Back
+	if myList.Front() != item1 || myList.Back() != item3 {
+		t.Errorf("Front or Back not as expected")
+	}
+
+	// Перемещаем элемент в начало списка
+	myList.MoveToFront(item2)
+
+	// Проверяем, что элемент переместился в начало 2 -> 1 -> 3
+	if myList.Front().Value != item2.Value || myList.Back().Value != item3.Value {
+		t.Errorf("MoveToFront failed")
+	}
+
+	// Удаляем элемент первый элемент, который стал 2
+	myList.Remove(myList.Front())
+
+	// Проверяем, что элемент успешно удален 1 -> 3
+	if myList.Len() != 2 || myList.Front().Value != item1.Value || myList.Back().Value != item3.Value {
+		t.Errorf("Remove failed")
+	}
+}
+
+func TestListTraversalOrder(t *testing.T) {
+	myList := NewList()
+
+	// Добавляем элементы
+	item1 := myList.PushBack(1)
+	item2 := myList.PushBack(2)
+	myList.PushBack(3)
+	myList.PushFront(4)
+
+	// Используем методы для List
+	myList.Remove(item1)
+	myList.MoveToFront(item2)
+
+	// Ожидаемый порядок при обходе списка: 2 -> 4 -> 3
+	expectedOrder := []int{2, 4, 3}
+
+	// Создаем слайс для хранения значений при обходе списка
+	actualOrder := make([]int, 0, len(expectedOrder))
+
+	// Обходим список и сохраняем значения в actualOrder
+	current := myList.Front()
+	for current != nil {
+		actualOrder = append(actualOrder, current.Value.(int))
+		current = current.Next
+	}
+
+	// Проверяем, что порядок значений совпадает с ожидаемым
+	for i, v := range expectedOrder {
+		if actualOrder[i] != v {
+			t.Errorf("Traversal order mismatch at index %d. Expected: %d, got: %d", i, v, actualOrder[i])
+		}
+	}
+}
