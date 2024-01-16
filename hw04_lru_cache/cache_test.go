@@ -50,30 +50,59 @@ func TestCache(t *testing.T) {
 	})
 
 	t.Run("purge logic", func(t *testing.T) {
-		// Write me
+		c := NewCache(3)
+
+		// Добавляем 4 элемента
+		c.Set("one", 1)
+		c.Set("two", 2)
+		c.Set("three", 3)
+		c.Set("four", 4)
+
+		// Первый элемент должен быть вытолкнут из-за размера очереди
+		_, ok := c.Get("one")
+		require.False(t, ok, "Expected element 'one' to be evicted")
+
+		// очищаем для переиспользования
+		c.Clear()
+
+		// Добавляем 3 элемента
+		c.Set("one", 1)
+		c.Set("two", 2)
+		c.Set("three", 3)
+
+		// Дергаем элементы, чтобы обновить время их использования
+		c.Get("one")
+		c.Get("three")
+
+		// Добавляем 4й элемент
+		c.Set("four", 4)
+
+		// Самый давно использовавшийся элемент должен быть вытолкнут
+		_, exists := c.Get("two")
+		require.False(t, exists, "Expected element 'two' to be evicted")
 	})
 }
 
 func TestCacheMultithreading(t *testing.T) {
-	t.Skip() // Remove me if task with asterisk completed.
+	t.Run("multi thread", func(t *testing.T) {
+		c := NewCache(10)
+		wg := &sync.WaitGroup{}
+		wg.Add(2)
 
-	c := NewCache(10)
-	wg := &sync.WaitGroup{}
-	wg.Add(2)
+		go func() {
+			defer wg.Done()
+			for i := 0; i < 1_000_000; i++ {
+				c.Set(Key(strconv.Itoa(i)), i)
+			}
+		}()
 
-	go func() {
-		defer wg.Done()
-		for i := 0; i < 1_000_000; i++ {
-			c.Set(Key(strconv.Itoa(i)), i)
-		}
-	}()
+		go func() {
+			defer wg.Done()
+			for i := 0; i < 1_000_000; i++ {
+				c.Get(Key(strconv.Itoa(rand.Intn(1_000_000))))
+			}
+		}()
 
-	go func() {
-		defer wg.Done()
-		for i := 0; i < 1_000_000; i++ {
-			c.Get(Key(strconv.Itoa(rand.Intn(1_000_000))))
-		}
-	}()
-
-	wg.Wait()
+		wg.Wait()
+	})
 }
