@@ -8,6 +8,11 @@ import (
 
 var reSpaceOrNewline = regexp.MustCompile(`\s+|\n`)
 
+type wordCount struct {
+	word  string
+	count int
+}
+
 func Top10(input string) []string {
 	if input == "" {
 		return []string{}
@@ -24,12 +29,7 @@ func Top10(input string) []string {
 		wordFreq[word]++
 	}
 
-	type wordCount struct {
-		word  string
-		count int
-	}
-
-	wordCounts := make([]wordCount, 0, 32)
+	wordCounts := make([]wordCount, 0, len(wordFreq))
 	for word, count := range wordFreq {
 		wordCounts = append(wordCounts, wordCount{word, count})
 	}
