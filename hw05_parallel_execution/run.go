@@ -2,7 +2,6 @@ package hw05parallelexecution
 
 import (
 	"errors"
-	"fmt"
 	"sync"
 	"sync/atomic"
 )
@@ -29,16 +28,13 @@ func Run(tasks []Task, n, m int) error {
 			case task, ok := <-taskCh:
 				if !ok {
 					// taskCh закрыт, завершаем работу
-					fmt.Println("<- stop taskCh закрыт")
 					return
 				}
-				fmt.Println("-> start")
 				// проверяем, не превышен ли лимит
 				if int(atomic.LoadInt32(&errorsCount)) >= m && m != 0 {
 					once.Do(func() {
 						close(stopCh)
 					})
-					fmt.Println("<- stop лимит ошибок")
 					return
 				}
 				// выполняем задание
@@ -49,7 +45,6 @@ func Run(tasks []Task, n, m int) error {
 				}
 			// остановка горутины при получении сигнала
 			case <-stopCh:
-				fmt.Println("<- stop канал stopCh закрыт")
 				return
 			}
 		}
@@ -61,7 +56,7 @@ func Run(tasks []Task, n, m int) error {
 		go worker(&once)
 	}
 
-	// Горутина для передачи заданий в канал и прерывния по сигналу stopCh в случае достижения m ошибок
+	// Горутина для передачи заданий в канал и её прерывния по сигналу stopCh в случае достижения m ошибок
 	go func() {
 		defer close(taskCh)
 		for _, task := range tasks {
