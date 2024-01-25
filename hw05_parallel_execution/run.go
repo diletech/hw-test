@@ -10,7 +10,7 @@ var ErrErrorsLimitExceeded = errors.New("errors limit exceeded")
 
 type Task func() error
 
-// Run выполняет задачи в n параллельных горутинах с ограничением на количество ошибок m
+// Run выполняет задачи в n параллельных горутинах с ограничением на количество ошибок m.
 func Run(tasks []Task, n, m int) error {
 	var wg sync.WaitGroup
 	var once sync.Once
