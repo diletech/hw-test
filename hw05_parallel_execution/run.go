@@ -2,6 +2,7 @@ package hw05parallelexecution
 
 import (
 	"errors"
+	"fmt"
 	"sync"
 	"sync/atomic"
 )
@@ -24,25 +25,31 @@ func Run(tasks []Task, n, m int) error {
 		defer wg.Done()
 		for {
 			select {
-			// Выполняем задание
+			// получаем функцию на выполнени
 			case task, ok := <-taskCh:
 				if !ok {
 					// taskCh закрыт, завершаем работу
+					fmt.Println("<- stop taskCh закрыт")
 					return
 				}
+				fmt.Println("-> start")
+				// проверяем, не превышен ли лимит
+				if int(atomic.LoadInt32(&errorsCount)) >= m && m != 0 {
+					once.Do(func() {
+						close(stopCh)
+					})
+					fmt.Println("<- stop лимит ошибок")
+					return
+				}
+				// выполняем задание
 				err := task()
-				// Увеличиваем счетчик ошибок и проверяем, не превышен ли лимит
+				// если ошибка, то увеличиваем счетчик ошибок
 				if err != nil {
 					atomic.AddInt32(&errorsCount, 1)
-					if int(atomic.LoadInt32(&errorsCount)) >= m && m != 0 {
-						once.Do(func() {
-							close(stopCh)
-						})
-						return
-					}
 				}
 			// остановка горутины при получении сигнала
 			case <-stopCh:
+				fmt.Println("<- stop канал stopCh закрыт")
 				return
 			}
 		}
@@ -79,6 +86,10 @@ func Run(tasks []Task, n, m int) error {
 		return nil
 	case <-stopCh:
 		// Функция была остановлена из-за превышения лимита ошибок
+		// и тут необходимо дождаться пока все воркеры завершаться
+		// иначе возможны racecond в вызывающей таске\тесте если вдруг что-то не атомарно и не потокобезапасно
+		// (хотя как кажется тут этот wg.Wait искуственно тормозит общее выполнение программы)
+		wg.Wait()
 		return ErrErrorsLimitExceeded
 	}
 }
