@@ -61,11 +61,16 @@ func stageWrapper(stage Stage, data interface{}) interface{} {
 	go func() {
 		defer close(out)
 		close(in)
+
+		// Выполнение стейджа с входным каналом
 		stageOut := stage(in)
+
+		// Передача данных из выходного канала стейджа в оберточный канал
 		for data := range stageOut {
 			out <- data
 		}
 	}()
 
+	// Возврат результата из оберточного канала
 	return <-out
 }
