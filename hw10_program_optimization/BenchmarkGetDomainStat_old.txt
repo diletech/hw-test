@@ -1,0 +1,16 @@
+goos: windows
+goarch: amd64
+pkg: github.com/diletech/hw-test/hw10_program_optimization
+cpu: Intel(R) Core(TM) i7-9700KF CPU @ 3.60GHz
+BenchmarkGetDomainStat-8   	       3	 451071733 ns/op	323327058 B/op	 3045403 allocs/op
+BenchmarkGetDomainStat-8   	       3	 446361467 ns/op	323314320 B/op	 3045401 allocs/op
+BenchmarkGetDomainStat-8   	       3	 446075800 ns/op	323314981 B/op	 3045403 allocs/op
+BenchmarkGetDomainStat-8   	       3	 446371733 ns/op	323327146 B/op	 3045404 allocs/op
+BenchmarkGetDomainStat-8   	       3	 445188767 ns/op	323327034 B/op	 3045404 allocs/op
+BenchmarkGetDomainStat-8   	       3	 451266467 ns/op	323314280 B/op	 3045401 allocs/op
+BenchmarkGetDomainStat-8   	       3	 447292900 ns/op	323327277 B/op	 3045406 allocs/op
+BenchmarkGetDomainStat-8   	       3	 447380567 ns/op	323326565 B/op	 3045402 allocs/op
+BenchmarkGetDomainStat-8   	       3	 461772333 ns/op	323363853 B/op	 3045407 allocs/op
+BenchmarkGetDomainStat-8   	       3	 455432533 ns/op	323389349 B/op	 3045412 allocs/op
+PASS
+ok  	github.com/diletech/hw-test/hw10_program_optimization	30.781s
